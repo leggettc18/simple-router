@@ -2,6 +2,8 @@
 
 namespace leggettc18\SimpleRouter;
 
+use Exception;
+
 class Request {
 
     /**
