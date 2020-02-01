@@ -64,7 +64,7 @@ class Router {
             return $this->callAction(...explode('@', $this->routes[$method][$uri]));
         }
 
-        throw new Exception("No route defined for this URI");
+        throw new Exception("No route defined for $uri");
 
     }
 
