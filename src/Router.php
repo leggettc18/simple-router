@@ -6,10 +6,20 @@ use Exception;
 
 class Router {
 
+    static $router = null;
+
     protected $routes = [
         'GET' => [],
         'POST' => []
     ];
+
+    public static function router() {
+        if (static::$router === null) {
+            static::$router = new Router();
+        }
+
+        return static::$router;
+    }
 
     /**
      * Sets up routes by loading from a file containing routes.
@@ -33,9 +43,9 @@ class Router {
      * @param $uri
      * @param $controller 
      */
-    public function get($uri, $controller) {
+    public static function get($uri, $controller) {
 
-        $this->routes['GET'][$uri] = $controller;
+        static::router()->routes['GET'][$uri] = $controller;
 
     }
 
@@ -45,9 +55,9 @@ class Router {
      * @param string
      * @param string
      */
-    public function post($uri, $controller) {
+    public static function post($uri, $controller) {
 
-        $this->routes['POST'][$uri] = $controller;
+        static::router()->routes['POST'][$uri] = $controller;
 
     }
 
@@ -58,10 +68,10 @@ class Router {
      * @param string
      * @return file result of call action.
      */
-    public function direct($uri, $method) {
+    public static function direct($uri, $method) {
 
-        if(array_key_exists($uri, $this->routes[$method])) {
-            return $this->callAction(...explode('@', $this->routes[$method][$uri]));
+        if(array_key_exists($uri, static::router()->routes[$method])) {
+            return static::router()->callAction(...explode('@', static::router()->routes[$method][$uri]));
         }
 
         throw new Exception("No route defined for $uri");
